@@ -1,0 +1,107 @@
+mysql> create database login;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use login;
+Database changed
+mysql> create table Login(
+    -> login_id INT auto_increment Primary key,
+    -> username VARCHAR(40),
+    -> password VARCHAR(49),
+    -> email VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> insert into Lgin values(1,'Stephen', 15343434532, 'stephen@javatpoint.com'),   
+    -> (2, 'Joseph', 35435479495, 'Joseph@javatpoint.com');  
+ERROR 1146 (42S02): Table 'login.Lgin' doesn't exist
+mysql> insert into Login values(1,'Stephen', 15343434532, 'stephen@javatpoint.com'),    (2, 'Joseph', 35435479495, 'Joseph@javatpoint.com');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into Login values(1,'Peter', 15343434532, 'peter@javatpoint.com');  
+ERROR 1062 (23000): Duplicate entry '1' for key 'Login.PRIMARY'
+mysql> select * from Login;
++----------+----------+-------------+------------------------+
+| login_id | username | password    | email                  |
++----------+----------+-------------+------------------------+
+|        1 | Stephen  | 15343434532 | stephen@javatpoint.com |
+|        2 | Joseph   | 35435479495 | Joseph@javatpoint.com  |
++----------+----------+-------------+------------------------+
+2 rows in set (0.00 sec)
+
+mysql> create table STUDENTS(
+    -> Student_ID int,
+    -> roll_no int,
+    -> Name Varchar(20) NOT NULL,
+    -> Age int,
+    -> city Varchar(25),
+    -> primary Key(Student_ID,roll_no)
+    -> );
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> desc STUDENTS;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| Student_ID | int         | NO   | PRI | NULL    |       |
+| roll_no    | int         | NO   | PRI | NULL    |       |
+| Name       | varchar(20) | NO   |     | NULL    |       |
+| Age        | int         | YES  |     | NULL    |       |
+| city       | varchar(25) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into STUDENTS values(1,115,"Divya",21,"Chennai"),(2,116,"Aishu",22,"Madurai"),(3,117,"Dhinesh",23,"Pondicherry");
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from STUDENTS;
++------------+---------+---------+------+-------------+
+| Student_ID | roll_no | Name    | Age  | city        |
++------------+---------+---------+------+-------------+
+|          1 |     115 | Divya   |   21 | Chennai     |
+|          2 |     116 | Aishu   |   22 | Madurai     |
+|          3 |     117 | Dhinesh |   23 | Pondicherry |
++------------+---------+---------+------+-------------+
+3 rows in set (0.01 sec)
+
+mysql> insert into STUDENTS values(1,115,"Parvathi",26,"Theni");
+ERROR 1062 (23000): Duplicate entry '1-115' for key 'STUDENTS.PRIMARY'
+mysql> insert into STUDENTS values(2,115,"Parvathi",26,"Theni");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into STUDENTS values(3,117,"Bharathi","Theni");
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into STUDENTS values(3,117,"Bharathi", ,"Theni");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',"Theni")' at line 1
+mysql> insert into STUDENTS values(3,117,"Bharathi",NULL ,"Theni");
+ERROR 1062 (23000): Duplicate entry '3-117' for key 'STUDENTS.PRIMARY'
+mysql> select * from STUDENTS;
++------------+---------+----------+------+-------------+
+| Student_ID | roll_no | Name     | Age  | city        |
++------------+---------+----------+------+-------------+
+|          1 |     115 | Divya    |   21 | Chennai     |
+|          2 |     115 | Parvathi |   26 | Theni       |
+|          2 |     116 | Aishu    |   22 | Madurai     |
+|          3 |     117 | Dhinesh  |   23 | Pondicherry |
++------------+---------+----------+------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into STUDENTS values(4,118,"Bharathi",NULL ,"Kerala");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from STUDENTS;
++------------+---------+----------+------+-------------+
+| Student_ID | roll_no | Name     | Age  | city        |
++------------+---------+----------+------+-------------+
+|          1 |     115 | Divya    |   21 | Chennai     |
+|          2 |     115 | Parvathi |   26 | Theni       |
+|          2 |     116 | Aishu    |   22 | Madurai     |
+|          3 |     117 | Dhinesh  |   23 | Pondicherry |
+|          4 |     118 | Bharathi | NULL | Kerala      |
++------------+---------+----------+------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into STUDENTS values(5,NULL,"Kavitha",45 ,"Salem");
+ERROR 1048 (23000): Column 'roll_no' cannot be null
+

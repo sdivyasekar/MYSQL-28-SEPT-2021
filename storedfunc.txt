@@ -1,0 +1,97 @@
+mysql> create database mydb5;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use mydb5;
+Database changed
+create function greet(name varchar(20))
+ returns varchar(20) 
+ Deterministic
+ begin 
+ return concat("welcome", name);
+ end $$
+Query OK, 0 rows affected (0.01 sec)
+mysql> Delimiter :
+mysql> -> select greet("Priya") :
++----------------+
+| greet("Priya") |
++----------------+
+| welcomePriya   |
++----------------+
+1 row in set (0.01 sec)
+======================================================================================
+========================================================================================
+===========================================================================================
+mysql> use mydb;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select * from person;
++------+----------+---------+------+
+| id   | name     | country | age  |
++------+----------+---------+------+
+|    1 | Saravana | India   |   22 |
+|    2 | Kumar    | India   |   21 |
+|    3 | Nancy    | USA     |   40 |
+|    4 | Thilak   | Dubai   |   35 |
++------+----------+---------+------+
+4 rows in set (0.00 sec)
+
+mysql> delimiter $$
+mysql> create function person( age int ) returns varchar(20) Deterministic begin declare country varchar(20); if age>21 THEN set country="China"; elseif(age<=35 AND age>=30)THEN set country="Japan"; ELSEIF age<30 THEN SET country="Korea"; END IF; RETURN(country); END $$
+ERROR 1304 (42000): FUNCTION person already exists
+mysql> create function person1( age int ) returns varchar(20) Deterministic begin declare country varchar(20); if age>21 THEN set country="China"; elseif(age<=35 AND age>=30)THEN set country="Japan"; ELSEIF age<30 THEN SET country="Korea";
+END IF; RETURN(country); END $$
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER ;
+mysql> select person(12);
++------------+
+| person(12) |
++------------+
+| Korea      |
++------------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> select person1(12);
++-------------+
+| person1(12) |
++-------------+
+| Korea       |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> show function status where db='mydb';
++------+---------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| Db   | Name    | Type     | Definer        | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
++------+---------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| mydb | person  | FUNCTION | root@localhost | 2021-09-27 19:08:58 | 2021-09-27 19:08:58 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| mydb | person1 | FUNCTION | root@localhost | 2021-09-28 09:51:09 | 2021-09-28 09:51:09 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++------+---------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+2 rows in set (0.01 sec)
+
+mysql> select name,age,country(age)
+    -> from person1 ORDER BY age;
+ERROR 1146 (42S02): Table 'mydb.person1' doesn't exist
+mysql> 
+mysql> select name,age,country(age)
+    -> from person ORDER BY age;
+ERROR 1305 (42000): FUNCTION mydb.country does not exist
+mysql> Delimiter ;
+mysql> select name,age,country(age)
+    -> from person ORDER BY age;
+ERROR 1305 (42000): FUNCTION mydb.country does not exist
+mysql> Delimiter ;
+mysql> select name,age,person(age) from person ORDER BY age;
++----------+------+-------------+
+| name     | age  | person(age) |
++----------+------+-------------+
+| Kumar    |   21 | Korea       |
+| Saravana |   22 | China       |
+| Thilak   |   35 | China       |
+| Nancy    |   40 | China       |
++----------+------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> 
